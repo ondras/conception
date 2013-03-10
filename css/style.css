@@ -1,0 +1,58 @@
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0px;
+	font-family: droid sans mono;
+	background-color: #000;
+	color: #999;
+	height: 100%;
+	overflow: hidden;
+	font-size: 15px;
+}
+
+p {
+	margin: 0.3em 0;
+}
+
+#column {
+	width: 400px;
+	float: right;
+	border-left: 2px solid #666;
+	height: 100%;
+	padding: .5em;
+}
+
+#inv {
+	border-bottom: 2px solid #666;
+	height: 10em;
+}
+
+#inv p {
+	text-align: center;
+}
+
+#inv table {
+	width: 100%;
+}
+
+.window {
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.8);
+	padding: 0.5em;
+	border: 4px double #999;
+}
+
+.window p:first-child {
+	margin-bottom: .5em;
+}
+
+.window em {
+	color: #fff;
+	font-style: normal;
+}
+
+.window em.cancel {
+	color: #c00;
+}
