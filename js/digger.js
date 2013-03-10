@@ -68,7 +68,7 @@ Game.Digger = {
 		
 		if (frac == 1) {
 			this._digCircle(end, 10);
-			var ovum = new Game.Ovum(5);
+			var ovum = new Game.Ovum(4);
 			Game.Util.round(end);
 			Game.setEntity(ovum, end[0], end[1]);
 			Game.engine.addActor(ovum);
@@ -108,10 +108,8 @@ Game.Digger = {
 			}
 
 			if (ROT.RNG.getUniform() < sliderChance) {
-				N[0] *= -1;
-				N[1] *= -1;
-				var slider = Game.Slider.fromVector(N);
-				Game.setEntity(slider, X[0], X[1]);
+				Game.Util.round(P);
+				var slider = Game.Slider.create(P, N);
 				Game.engine.addActor(slider);
 				sliderChance = baseSliderChance;
 			} else {

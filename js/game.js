@@ -43,7 +43,7 @@ var Game = {
 
 	_start: function() {
 		var options = {
-			fontSize: 20,
+			fontSize: 5,
 			layout: "hex",
 			fontFamily: "droid sans mono",
 			border: 0.5,

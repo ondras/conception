@@ -7,13 +7,24 @@ Game.Slider = function(orientation) {
 }
 Game.Slider.extend(Game.Entity);
 
-Game.Slider.fromVector = function(V) {
+Game.Slider.create = function(point, V) {
 	var angle = Math.atan2(V[1], V[0]);
 	if (angle < 0) { angle += 2*Math.PI; }
 	angle = 6*angle/(2*Math.PI);
 
 	var orientation = Math.floor(angle+2.5).mod(6);
-	return new this(orientation);
+	
+	var inverse = (orientation + 3).mod(6);
+	var dir = ROT.DIRS[6][inverse];
+	while (point.join(",") in Game.tunnel) {
+		point[0] += dir[0];
+		point[1] += dir[1];
+	}
+	
+	var slider = new this(orientation);
+	Game.setEntity(slider, point[0], point[1]);
+
+	return slider;
 }
 
 Game.Slider.prototype.act = function() {
