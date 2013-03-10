@@ -43,7 +43,7 @@ var Game = {
 
 	_start: function() {
 		var options = {
-			fontSize: 5,
+			fontSize: 20,
 			layout: "hex",
 			fontFamily: "droid sans mono",
 			border: 0.5,
@@ -72,7 +72,7 @@ var Game = {
 		var key = x+","+y;
 		var entity = this.entities[key];
 		if (entity) {
-			this._display.draw(dispX, dispY, entity.getChar(), entity.getFg(), entity.getBg());
+			this._display.draw(dispX, dispY, entity.ch, entity.fg, entity.bg);
 		} else if (this.tunnel[key]) {
 			this._display.draw(dispX, dispY);
 		} else {
@@ -97,9 +97,21 @@ var Game = {
 			}
 		}
 	},
+	
+	over: function(victory) {
+		this.engine.lock();
+		var status = document.querySelector("#status")
+		if (victory) {
+			status.innerHTML = "Mission accomplished!";
+			alert("Good job, soldier! We are victorious!");
+		} else {
+			status.innerHTML = "<a href='http://en.wikipedia.org/wiki/FUBAR'>FUBAR</a>";
+			alert("Damn, you have run out of energy. Reload the page and try again, this is an order!");
+		}
+	},
 
 	_resize: function() {
-		var size = this._display.computeSize(window.innerWidth/2, window.innerHeight);
+		var size = this._display.computeSize(window.innerWidth-document.querySelector("#column").offsetWidth, window.innerHeight);
 		this._display.setOptions({width:size[0], height:size[1]});
 		this.setCenter();
 	},

@@ -60,7 +60,7 @@ Game.Digger = {
 		var Mw = this._options.maxWidth;
 		this._options.width = mw + ROT.RNG.getUniform()*(Mw-mw);
 
-		this._digQuadraticBezier(start, end, cp);
+		var midpoints = this._digQuadraticBezier(start, end, cp);
 		
 		if (frac == 0) {
 			this._digCircle(start, 8);
@@ -73,14 +73,29 @@ Game.Digger = {
 			Game.setEntity(ovum, end[0], end[1]);
 			Game.engine.addActor(ovum);
 		}
+		
+		if (frac > 0 && frac < 1) {
+			var avail = [];
+			for (var key in midpoints) { avail.push(key); }
+			avail = avail.randomize();
+			var sliders = 3;
+			for (var i=0;i<sliders;i++) {
+				key = avail.shift();
+				var vec = midpoints[key];
+				var parts = key.split(",");
+				parts[0] = parseInt(parts[0]);
+				parts[1] = parseInt(parts[1]);
+				console.log(parts, vec);
+				var slider = Game.Slider.create(parts, vec);
+				Game.engine.addActor(slider);
+			}
+		}
 	},
 	
 	_digQuadraticBezier: function(P0, P2, P1) {
+		var midpoints = {};
 		var A = [P1[0]-P0[0], P1[1]-P0[1]];
 		var B = [P2[0]-P1[0]-A[0], P2[1]-P1[1]-A[1]];
-		var baseSliderChance = 0.0005;
-		var sliderChanceDiff = 0.0001;
-		var sliderChance = baseSliderChance;
 
 		var count = 5*Game.Util.norm(A);
 		var width = this._options.width;
@@ -106,16 +121,13 @@ Game.Digger = {
 				Game.Util.round(X);
 				Game.tunnel[X.join(",")] = true;
 			}
-
-			if (ROT.RNG.getUniform() < sliderChance) {
+			
+			if (t > 0.2 && t < 0.8) {
 				Game.Util.round(P);
-				var slider = Game.Slider.create(P, N);
-				Game.engine.addActor(slider);
-				sliderChance = baseSliderChance;
-			} else {
-				sliderChance += sliderChanceDiff;
+				midpoints[P.join(",")] = N;
 			}
 		}
+		return midpoints;
 	},
 	
 }

@@ -1,6 +1,8 @@
 Game.Player = function() {
 	Game.Entity.call(this, "@", "white");
 
+	this._maxEnergy = 10;
+	this._energy = this._maxEnergy+1;
 	this._parts = [this];
 
 	var parts = ["o", ".", ".", "."];
@@ -41,16 +43,21 @@ Game.Player.prototype.showAt = function(x, y) {
 }
 
 Game.Player.prototype.act = function() {
+	this._energy--;
+	this._updateEnergy();
+	if (!this._energy) {
+		Game.over(false);
+		return;
+	}
+	
 	Game.engine.lock();
 	window.addEventListener("keydown", this); /* wait for input */
 }
 
 Game.Player.prototype.handleEvent = function(e) {
 	var code = e.keyCode;
-
 	if (!(code in this._keys)) { return; } /* not a direction/noop */
 	
-	e.preventDefault();
 	code = this._keys[code];
 
 	if (code == -1) { /* noop */
@@ -65,10 +72,21 @@ Game.Player.prototype.handleEvent = function(e) {
 	this._tryMove(x, y);
 }
 
+Game.Player.prototype._updateEnergy = function() {
+	var node = document.querySelector("#energy");
+	node.innerHTML = this._energy;
+	var frac = this._energy/this._maxEnergy;
+	var color = ROT.Color.interpolateHSL([255, 0, 0], [60, 60, 255], frac);
+	node.style.color = ROT.Color.toRGB(color);
+}
+
 Game.Player.prototype._tryMove = function(x, y) {
 	var key = x+","+y;
 	var entity = Game.entities[key];
-	if (entity && entity != this._parts[this._parts.length-1]) { return; }
+	if (entity && entity.blocks && entity != this._parts[this._parts.length-1]) { 
+		entity.bump();
+		return; 
+	}
 	if (!(key in Game.tunnel)) { return; }
 
 	var newPositions = [[x, y]];
