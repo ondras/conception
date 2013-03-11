@@ -9,30 +9,34 @@ Game.Player = function() {
 	while (parts.length) {
 		this._parts.push(new Game.Entity(parts.shift(), "white"));
 	}
-	
+
 	this._keys = {};
-	this._keys[103]	= 0; /* top left */
-	this._keys[105]	= 1; /* top right */
-	this._keys[102]	= 2; /* right */
-	this._keys[99]	= 3; /* bottom right */
-	this._keys[97]	= 4; /* bottom left */
-	this._keys[100]	= 5; /* left */
 
-	this._keys[81]	= 0; /* top left */
-	this._keys[87]	= 1; /* top right */
-	this._keys[83]	= 2; /* right */
-	this._keys[88]	= 3; /* bottom right */
-	this._keys[90]	= 4; /* bottom left */
-	this._keys[65]	= 5; /* left */
+	this._keys[ROT.VK_Y] = 0;
+	this._keys[ROT.VK_NUMPAD7] = 0;
+	this._keys[ROT.VK_U] = 1;
+	this._keys[ROT.VK_NUMPAD9] = 1;
+	this._keys[ROT.VK_L] = 2;
+	this._keys[ROT.VK_RIGHT] = 2;
+	this._keys[ROT.VK_NUMPAD6] = 2;
+	this._keys[ROT.VK_N] = 3;
+	this._keys[ROT.VK_NUMPAD3] = 3;
+	this._keys[ROT.VK_B] = 4;
+	this._keys[ROT.VK_NUMPAD1] = 4;
+	this._keys[ROT.VK_H] = 5;
+	this._keys[ROT.VK_LEFT] = 5;
+	this._keys[ROT.VK_NUMPAD4] = 5;
+	this._keys[ROT.VK_K] = 0;
+	this._keys[ROT.VK_UP] = 0;
+	this._keys[ROT.VK_NUMPAD8] = 0;
+	this._keys[ROT.VK_J] = 3;
+	this._keys[ROT.VK_DOWN] = 3;
+	this._keys[ROT.VK_NUMPAD2] = 3;
 
-	this._keys[37]	= 5; /* left */
-	this._keys[39]	= 2; /* right */
-	this._keys[38]	= 0; /* up */
-	this._keys[40]	= 3; /* bottom */
-
-	this._keys[101]	= -1; /* noop */
-	this._keys[110]	= -1; /* noop */
-	this._keys[190]	= -1; /* noop */
+	this._keys[ROT.VK_PERIOD] = -1;
+	this._keys[ROT.VK_CLEAR] = -1;
+	this._keys[ROT.VK_NUMPAD5] = -1;
+	
 }
 Game.Player.extend(Game.Entity);
 

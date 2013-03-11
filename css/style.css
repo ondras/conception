@@ -9,6 +9,18 @@ a {
 	color: #fff;
 }
 
+h1 {
+	font-family: fredericka the great;
+	color: #ccc;
+	text-align: center;
+	font-size: 80px;
+	font-weight: normal;
+}
+
+#intro ~ * {
+	display: none;
+}
+
 #column {
 	width: 400px;
 	position: absolute;

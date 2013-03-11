@@ -37,11 +37,11 @@ var Game = {
 		this.engine = new ROT.Engine();
 		this.player = new Game.Player();
 		this.engine.addActor(this.player);
-
-		this._start();
+		
+		new Game.Intro();
 	},
 
-	_start: function() {
+	start: function() {
 		var options = {
 			fontSize: 20,
 			layout: "hex",
