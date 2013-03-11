@@ -1,7 +1,7 @@
 Game.Player = function() {
 	Game.Entity.call(this, "@", "white");
 
-	this._maxEnergy = 10;
+	this._maxEnergy = 20;
 	this._energy = this._maxEnergy+1;
 	this._parts = [this];
 
@@ -10,6 +10,7 @@ Game.Player = function() {
 		this._parts.push(new Game.Entity(parts.shift(), "white"));
 	}
 
+	this._energyPerPart = Math.floor(this._maxEnergy/this._parts.length);
 	this._keys = {};
 
 	this._keys[ROT.VK_Y] = 0;
@@ -46,13 +47,23 @@ Game.Player.prototype.showAt = function(x, y) {
 	}
 }
 
-Game.Player.prototype.act = function() {
-	this._energy--;
+Game.Player.prototype.adjustEnergy = function(diff) {
+	this._energy = Math.max(0, this._energy + diff);
 	this._updateEnergy();
-	if (!this._energy) {
-		Game.over(false);
-		return;
+	
+	var parts = Math.ceil(this._energy / this._energyPerPart);
+	parts = Math.max(parts, 1);
+
+	while (parts < this._parts.length) {
+		Game.removeEntity(this._parts.pop());
 	}
+
+	if (!this._energy) { Game.over(false); }
+}
+
+Game.Player.prototype.act = function() {
+	this.adjustEnergy(-1);
+	if (!this._energy) { return; }
 	
 	Game.engine.lock();
 	window.addEventListener("keydown", this); /* wait for input */
