@@ -1,5 +1,5 @@
 Game.Ovum = function(radius) {
-	Game.Entity.call(this, "*", "#ee4");
+	Game.Entity.call(this, "O", "#ee4");
 	this._radius = radius;
 	this._parts = [];
 	this._period = 8;
@@ -44,7 +44,7 @@ Game.Ovum.prototype._build = function() {
 	for (var i=0;i<6;i++) {
 		var dir = ROT.DIRS[6][i];
 		for (var j=0;j<this._radius;j++) {
-			var part = new Game.Entity(this.ch, this.fg, this.bg);
+			var part = new Game.Entity("*", this.fg, this.bg);
 			part.bump = this._bumpPart;
 			this._parts.push(part);
 			Game.setEntity(part, pos[0], pos[1]);
