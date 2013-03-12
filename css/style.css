@@ -92,18 +92,29 @@ canvas {
 
 #intro div p {
 	text-align: left;
+	-webkit-animation: movement 8s linear infinite;
+	-moz-animation: movement 8s linear infinite;
 	animation: movement 8s linear infinite;
 }
 
 #intro div p:nth-child(1) {
+	-webkit-animation-duration: 9s;
+	-moz-animation-duration: 9s;
 	animation-duration: 9s;
 }
 
 #intro div p:nth-child(3) {
+	-webkit-animation-duration: 10s;
+	-moz-animation-duration: 10s;
 	animation-duration: 10s;
 }
 
-@keyframes movement {
-	0% { transform: translate(0, 0); }
-	100% { transform: translate(100%, 0); }
+@-webkit-keyframes movement {
+	0% { -webkit-transform: translate(0, 0); }
+	100% { -webkit-transform: translate(100%, 0); }
+}
+
+@-moz-keyframes movement {
+	0% { -moz-transform: translate(0, 0); }
+	100% { -moz-transform: translate(100%, 0); }
 }

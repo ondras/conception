@@ -102,8 +102,8 @@ var Game = {
 		/* redraw all */
 		this._display.clear();
 
-		for (var j=0;j<opts.height;j++) {
-			for (var i=j%2;i<opts.width;i+=2) {
+		for (var j=0 - 1;j<opts.height + 1;j++) {
+			for (var i=j%2 - 2;i<opts.width + 2;i+=2) {
 				this._draw(i+this._offset[0], j+this._offset[1]);
 			}
 		}
