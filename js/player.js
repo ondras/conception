@@ -1,13 +1,17 @@
 Game.Player = function() {
 	Game.Entity.call(this, "@", "white");
 
-	this._maxEnergy = 20;
+	this._maxEnergy = 200;
 	this._energy = this._maxEnergy+1;
 	this._parts = [this];
+	this.player = true;
 
 	var parts = ["o", ".", ".", "."];
 	while (parts.length) {
-		this._parts.push(new Game.Entity(parts.shift(), "white"));
+		var part = new Game.Entity(parts.shift(), "white");
+		part.player = true;
+		part.bump = this.bump.bind(this); /* bumping into our parts is the same as bumping to us */
+		this._parts.push(part);
 	}
 
 	this._energyPerPart = Math.floor(this._maxEnergy/this._parts.length);
@@ -69,6 +73,10 @@ Game.Player.prototype.act = function() {
 	window.addEventListener("keydown", this); /* wait for input */
 }
 
+Game.Player.prototype.bump = function(who, power) {
+	this.adjustEnergy(-power);
+}
+
 Game.Player.prototype.handleEvent = function(e) {
 	var code = e.keyCode;
 	if (!(code in this._keys)) { return; } /* not a direction/noop */
@@ -98,11 +106,25 @@ Game.Player.prototype._updateEnergy = function() {
 Game.Player.prototype._tryMove = function(x, y) {
 	var key = x+","+y;
 	var entity = Game.entities[key];
-	if (entity && entity.blocks && entity != this._parts[this._parts.length-1]) { 
-		entity.bump();
+	
+	if (entity) {
+		var index = this._parts.indexOf(entity);
+
+		if (index == -1) { 
+			entity.bump(this, 100);
+			return; 
+		}
+
+		if (index < this._parts.length-1) {
+			return;
+		}
+	}
+	
+	
+	if (!(key in Game.tunnel)) {
+		Game.message("Cannot move there.");
 		return; 
 	}
-	if (!(key in Game.tunnel)) { return; }
 
 	var newPositions = [[x, y]];
 	for (var i=0;i<this._parts.length;i++) {

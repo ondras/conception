@@ -7,6 +7,17 @@ var Game = {
 	_offset: [0, 0], /* cell in left-top of canvas */
 	_colors: {},
 	_noise: new ROT.Noise.Simplex(),
+	
+	message: function(text) {
+		var node = document.createElement("p");
+		node.innerHTML = text;
+		var parent = document.querySelector("#messages > div");
+		parent.insertBefore(node, parent.firstChild);
+		
+		setTimeout(function() {
+			node.style.opacity = 0;
+		}, 8000);
+	},
 
 	setEntity: function(entity, x, y) {
 		var oldPosition = entity.getPosition();
@@ -43,11 +54,11 @@ var Game = {
 
 	start: function() {
 		var options = {
-			fontSize: 20,
+			fontSize: 24,
 			layout: "hex",
 			fontFamily: "droid sans mono",
 			border: 0.5,
-			spacing: 0.9
+			spacing: 0.85
 		}
 		this._display = new ROT.Display(options);
 		document.body.appendChild(this._display.getContainer());
@@ -103,6 +114,7 @@ var Game = {
 		var status = document.querySelector("#status")
 		if (victory) {
 			status.innerHTML = "Mission accomplished!";
+			status.style.color = "#33f";
 			alert("Good job, soldier! We are victorious!");
 		} else {
 			status.innerHTML = "<a href='http://en.wikipedia.org/wiki/FUBAR'>FUBAR</a>";
@@ -114,6 +126,10 @@ var Game = {
 		var size = this._display.computeSize(window.innerWidth-document.querySelector("#column").offsetWidth, window.innerHeight);
 		this._display.setOptions({width:size[0], height:size[1]});
 		this.setCenter();
+		
+		var messages = document.querySelector("#messages");
+		var height = window.innerHeight - messages.offsetTop - 20;
+		messages.style.height = height+"px";
 	},
 
 	_getColor: function(x, y) {

@@ -23,5 +23,5 @@ Game.Entity.prototype.act = function() {
 }
 
 /* player bumps into */
-Game.Entity.prototype.bump = function() {
+Game.Entity.prototype.bump = function(who, power) {
 }

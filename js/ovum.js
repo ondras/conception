@@ -1,5 +1,5 @@
 Game.Ovum = function(radius) {
-	Game.Entity.call(this, "*", "#cc4");
+	Game.Entity.call(this, "*", "#ee4");
 	this._radius = radius;
 	this._parts = [];
 	this._period = 8;
@@ -14,7 +14,7 @@ Game.Ovum.prototype.setPosition = function(x, y) {
 	this._build();
 }
 
-Game.Ovum.prototype.bump = function() {
+Game.Ovum.prototype.bump = function(who, power) {
 	Game.over(true);
 }
 
@@ -22,7 +22,8 @@ Game.Ovum.prototype.act = function() {
 	this._time++;
 	if (this._time >= this._period) {
 		if (this._hiddenPart) {
-			/* FIXME check player's position */
+			var entity = Game.entities[this._hiddenPosition.join(",")];
+			if (entity) { return; }
 			Game.setEntity(this._hiddenPart, this._hiddenPosition[0], this._hiddenPosition[1]);
 		}
 
@@ -44,10 +45,15 @@ Game.Ovum.prototype._build = function() {
 		var dir = ROT.DIRS[6][i];
 		for (var j=0;j<this._radius;j++) {
 			var part = new Game.Entity(this.ch, this.fg, this.bg);
+			part.bump = this._bumpPart;
 			this._parts.push(part);
 			Game.setEntity(part, pos[0], pos[1]);
 			pos[0] += dir[0];
 			pos[1] += dir[1];
 		}
 	}
+}
+
+Game.Ovum.prototype._bumpPart = function(who, power) {
+	if (who.player) { Game.message("This egg's cover is impenetrable."); }
 }

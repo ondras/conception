@@ -3,7 +3,7 @@ Game.Digger = {
 	_options: {
 		minWidth: 3,
 		maxWidth: 8,
-		segments: 2,
+		segments: 3,
 		length: 40,
 		cpDirection: 1
 	},
@@ -67,11 +67,20 @@ Game.Digger = {
 		}
 		
 		if (frac == 1) {
-			this._digCircle(end, 10);
-			var ovum = new Game.Ovum(4);
+			var ovumSize = 4;
+			this._digCircle(end, 2*ovumSize + 2);
+			var ovum = new Game.Ovum(ovumSize);
 			Game.Util.round(end);
 			Game.setEntity(ovum, end[0], end[1]);
 			Game.engine.addActor(ovum);
+			
+			if (ROT.RNG.getUniform() < 1/85) {
+				end[0] += 5*ovumSize;
+				this._digCircle(end, 2*ovumSize + 2);
+				var ovum = new Game.Ovum(ovumSize);
+				Game.setEntity(ovum, end[0], end[1]);
+				Game.engine.addActor(ovum);
+			}
 		}
 		
 		if (frac > 0 && frac < 1) {

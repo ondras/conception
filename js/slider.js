@@ -1,5 +1,5 @@
 Game.Slider = function(orientation) {
-	Game.Entity.call(this, null, null, "gray");
+	Game.Entity.call(this, "#");
 
 	this._orientation = orientation;
 	this._direction = 1;
@@ -20,6 +20,8 @@ Game.Slider.create = function(point, V) {
 		point[0] += dir[0];
 		point[1] += dir[1];
 	}
+	point[0] -= dir[0];
+	point[1] -= dir[1];
 	
 	var slider = new this(orientation);
 	Game.setEntity(slider, point[0], point[1]);
@@ -35,11 +37,15 @@ Game.Slider.prototype.act = function() {
 		var y = pos[1] + dir[1];
 		var key = x+","+y;
 
-		if (key in Game.entities) {
-
+		var entity = Game.entities[key];
+		if (entity) {
+			entity.bump(this, 5);
+			if (entity.player) { Game.message("Ouch! We were hit and lost some energy."); }
+			return;
 		}
 
-		var part = new Game.Entity(null, null, "gray");
+		var part = new Game.Entity(this.ch, this.fg, this.bg);
+		part.bump = this.bump.bind(this);
 		this._parts.push(part);
 		Game.setEntity(part, x, y);
 
@@ -51,4 +57,8 @@ Game.Slider.prototype.act = function() {
 		Game.removeEntity(last);
 		if (this._parts.length == 1) { this._direction = 1; }
 	}
+}
+
+Game.Slider.prototype.bump = function(who, power) {
+	if (who.player) { Game.message("This indestructible thing blocks the way..."); }
 }
