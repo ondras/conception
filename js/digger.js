@@ -8,7 +8,7 @@ Game.Digger = {
 		cpDirection: 1
 	},
 	
-	dig: function(options) {
+	dig: function(options, callback) {
 		for (var p in options) { this._options[p] = options[p]; }
 		
 		var start = [0, 0];
@@ -26,6 +26,8 @@ Game.Digger = {
 			this._digSegment(start, end, i/(this._options.segments-1));
 			start = end;
 		}
+		
+		setTimeout(function() { Game.intro.ready(); }, 5000);
 	},
 	
 	_digCircle: function(C, radius) {

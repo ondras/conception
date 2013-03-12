@@ -3,26 +3,16 @@ body {
 	font-family: droid sans mono;
 	background-color: #000;
 	overflow: hidden;
+	color: #aaa;
 }
 
-a {
+a, strong {
 	color: #fff;
-}
-
-h1 {
-	font-family: fredericka the great;
-	color: #ccc;
-	text-align: center;
-	font-size: 80px;
 	font-weight: normal;
 }
 
 canvas {
 	display: block;
-}
-
-#intro ~ * {
-	display: none;
 }
 
 #column {
@@ -31,7 +21,6 @@ canvas {
 	right: 0;
 	top: 0;
 	padding: .5em;
-	color: #aaa;
 }
 
 #column td {
@@ -79,4 +68,42 @@ canvas {
 	left: 0;
 	bottom: 0;
 	background-image: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1));
+}
+
+
+#intro ~ * {
+	display: none;
+}
+
+#intro {
+	text-align: center;
+}
+
+#intro h1 {
+	font-family: fredericka the great;
+	color: #ccc;
+	font-size: 80px;
+	font-weight: normal;
+}
+
+#intro #loading {
+	margin: 4em 0 3em 0;
+}
+
+#intro div p {
+	text-align: left;
+	animation: movement 8s linear infinite;
+}
+
+#intro div p:nth-child(1) {
+	animation-duration: 9s;
+}
+
+#intro div p:nth-child(3) {
+	animation-duration: 10s;
+}
+
+@keyframes movement {
+	0% { transform: translate(0, 0); }
+	100% { transform: translate(100%, 0); }
 }

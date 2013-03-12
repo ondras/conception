@@ -1,6 +1,7 @@
 var Game = {
-	engine: null,
+	engine: new ROT.Engine(),
 	player: null,
+	intro: null,
 	entities: {},
 	tunnel: {},
 	_display: null,
@@ -45,14 +46,8 @@ var Game = {
 	},
 	
 	init: function() {
-		this.engine = new ROT.Engine();
 		this.player = new Game.Player();
 		this.engine.addActor(this.player);
-		
-		new Game.Intro();
-	},
-
-	start: function() {
 		var options = {
 			fontSize: 24,
 			layout: "hex",
@@ -61,9 +56,14 @@ var Game = {
 			spacing: 0.85
 		}
 		this._display = new ROT.Display(options);
+
+		this.intro = new Game.Intro();
+		Game.Digger.dig();
+	},
+	
+	start: function() {
 		document.body.appendChild(this._display.getContainer());
 
-		Game.Digger.dig();
 		this.player.showAt(0, 0);
 		this._resize();
 
