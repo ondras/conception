@@ -111,6 +111,7 @@ var Game = {
 	
 	over: function(victory) {
 		this.engine.lock();
+		this.removeEntity(this.player);
 		var status = document.querySelector("#status")
 		if (victory) {
 			status.innerHTML = "Mission accomplished!";

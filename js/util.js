@@ -10,5 +10,13 @@ Game.Util = {
 	
 	norm: function(V) {
 		return Math.sqrt(V[0]*V[0]+V[1]*V[1])
+	},
+	
+	vectorToDirection: function(V) {
+		var angle = Math.atan2(V[1], V[0]);
+		if (angle < 0) { angle += 2*Math.PI; }
+		angle = 6*angle/(2*Math.PI);
+
+		return Math.floor(angle+2.5).mod(6);
 	}
 }

@@ -65,6 +65,11 @@ Game.Player.prototype.adjustEnergy = function(diff) {
 	if (!this._energy) { Game.over(false); }
 }
 
+Game.Player.prototype.restoreEnergy = function() {
+	var max = this._parts.length * this._energyPerPart;
+	this.adjustEnergy(max-this._energy);
+}
+
 Game.Player.prototype.act = function() {
 	this.adjustEnergy(-1);
 	if (!this._energy) { return; }
@@ -92,7 +97,12 @@ Game.Player.prototype.handleEvent = function(e) {
 	var dir = ROT.DIRS[6][code];
 	var x = this._position[0] + dir[0];
 	var y = this._position[1] + dir[1];
-	this._tryMove(x, y);
+	var played = this._tryMove(x, y);
+	
+	if (played) {
+		window.removeEventListener("keydown", this);
+		Game.engine.unlock();
+	}
 }
 
 Game.Player.prototype._updateEnergy = function() {
@@ -112,18 +122,18 @@ Game.Player.prototype._tryMove = function(x, y) {
 
 		if (index == -1) { 
 			entity.bump(this, 100);
-			return; 
+			return true; 
 		}
 
 		if (index < this._parts.length-1) {
-			return;
+			return false;
 		}
 	}
 	
 	
 	if (!(key in Game.tunnel)) {
 		Game.message("Cannot move there.");
-		return; 
+		return false; 
 	}
 
 	var newPositions = [[x, y]];
@@ -139,7 +149,5 @@ Game.Player.prototype._tryMove = function(x, y) {
 	} 
 
 	Game.setCenter();
-
-	window.removeEventListener("keydown", this);
-	Game.engine.unlock();
+	return true;
 }

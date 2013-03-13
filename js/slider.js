@@ -1,5 +1,5 @@
 Game.Slider = function(orientation) {
-	Game.Entity.call(this, "#");
+	Game.Entity.call(this, "~", "#c44");
 
 	this._orientation = orientation;
 	this._direction = 1;
@@ -8,11 +8,7 @@ Game.Slider = function(orientation) {
 Game.Slider.extend(Game.Entity);
 
 Game.Slider.create = function(point, V) {
-	var angle = Math.atan2(V[1], V[0]);
-	if (angle < 0) { angle += 2*Math.PI; }
-	angle = 6*angle/(2*Math.PI);
-
-	var orientation = Math.floor(angle+2.5).mod(6);
+	var orientation = Game.Util.vectorToDirection(V);
 	
 	var inverse = (orientation + 3).mod(6);
 	var dir = ROT.DIRS[6][inverse];
@@ -39,8 +35,8 @@ Game.Slider.prototype.act = function() {
 
 		var entity = Game.entities[key];
 		if (entity) {
-			entity.bump(this, 5);
-			if (entity.player) { Game.message("Ouch! We were hit and lost some energy."); }
+			entity.bump(this, 20);
+			if (entity.player) { Game.message("Ouch! I was hit and lost some energy."); }
 			return;
 		}
 

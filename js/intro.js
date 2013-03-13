@@ -2,7 +2,7 @@ Game.Intro = function() {
 	this._node = document.querySelector("#intro");
 	this._ready = false;
 	this._waiting = true;
-	setTimeout(this._timeout.bind(this), 3000);
+	setTimeout(this._timeout.bind(this), 300);
 }
 
 Game.Intro.prototype.ready = function() {

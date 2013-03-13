@@ -27,7 +27,7 @@ Game.Digger = {
 			start = end;
 		}
 		
-		setTimeout(function() { Game.intro.ready(); }, 5000);
+		Game.intro.ready();
 	},
 	
 	_digCircle: function(C, radius) {
@@ -63,6 +63,9 @@ Game.Digger = {
 		this._options.width = mw + ROT.RNG.getUniform()*(Mw-mw);
 
 		var midpoints = this._digQuadraticBezier(start, end, cp);
+		var avail = [];
+		for (var key in midpoints) { avail.push(key); }
+		avail = avail.randomize();
 		
 		if (frac == 0) {
 			this._digCircle(start, 8);
@@ -86,20 +89,15 @@ Game.Digger = {
 		}
 		
 		if (frac > 0 && frac < 1) {
-			var avail = [];
-			for (var key in midpoints) { avail.push(key); }
-			avail = avail.randomize();
-			var sliders = 3;
-			for (var i=0;i<sliders;i++) {
-				key = avail.shift();
-				var vec = midpoints[key];
-				var parts = key.split(",");
-				parts[0] = parseInt(parts[0]);
-				parts[1] = parseInt(parts[1]);
-				console.log(parts, vec);
-				var slider = Game.Slider.create(parts, vec);
-				Game.engine.addActor(slider);
-			}
+			this._generateSliders(avail, midpoints);
+		}
+		
+		if (frac < 1) {
+			this._generatePlatelets(avail, midpoints);
+		}
+
+		if (frac > 0) {
+			this._generateRed(avail, midpoints);
 		}
 	},
 	
@@ -133,7 +131,7 @@ Game.Digger = {
 				Game.tunnel[X.join(",")] = true;
 			}
 			
-			if (t > 0.2 && t < 0.8) {
+			if (t > 0.1 && t < 0.9) {
 				Game.Util.round(P);
 				midpoints[P.join(",")] = N;
 			}
@@ -141,4 +139,40 @@ Game.Digger = {
 		return midpoints;
 	},
 	
+	_generateSliders: function(avail, midpoints) {
+		var count = Math.floor(3*ROT.RNG.getUniform());
+		for (var i=0;i<count;i++) {
+			key = avail.shift();
+			var vec = midpoints[key];
+			var parts = key.split(",");
+			parts[0] = parseInt(parts[0]);
+			parts[1] = parseInt(parts[1]);
+			var slider = Game.Slider.create(parts, vec);
+			Game.engine.addActor(slider);
+		}
+	},
+
+	_generatePlatelets: function(avail, midpoints) {
+		var count = Math.floor(3*ROT.RNG.getUniform());
+		for (var i=0;i<count;i++) {
+			key = avail.shift();
+			var vec = midpoints[key];
+			var parts = key.split(",");
+			parts[0] = parseInt(parts[0]);
+			parts[1] = parseInt(parts[1]);
+			Game.Platelet.create(parts, vec);
+		}
+	},
+
+	_generateRed: function(avail, midpoints) {
+		var count = Math.floor(3*ROT.RNG.getUniform());
+		for (var i=0;i<count;i++) {
+			key = avail.shift();
+			var vec = midpoints[key];
+			var parts = key.split(",");
+			parts[0] = parseInt(parts[0]);
+			parts[1] = parseInt(parts[1]);
+			Game.Red.create(parts, vec);
+		}
+	}
 }
