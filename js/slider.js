@@ -4,6 +4,7 @@ Game.Slider = function(orientation) {
 	this._orientation = orientation;
 	this._direction = 1;
 	this._parts = [this];
+	this._name = "indestructible thing";
 }
 Game.Slider.extend(Game.Entity);
 
@@ -57,5 +58,5 @@ Game.Slider.prototype.act = function() {
 }
 
 Game.Slider.prototype.bump = function(who, power) {
-	if (who.player) { Game.message("This indestructible thing blocks the way..."); }
+	if (who.player) { Game.message("This %c blocks the way...".format(this)); }
 }

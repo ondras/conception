@@ -1,5 +1,6 @@
 Game.Red = function() {
 	Game.Entity.call(this, "o", "#f33");
+	this._name = "red blood cell";
 }
 Game.Red.extend(Game.Entity);
 
@@ -15,5 +16,5 @@ Game.Red.prototype.bump = function(who, power) {
 	if (!who.player) { return; }
 	
 	who.restoreEnergy();
-	Game.message("This red blood cell restored some of your energy.");
+	Game.message("This %c restored some of your energy.".format(this));
 }

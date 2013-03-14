@@ -1,9 +1,16 @@
+String.format.map["c"] = "describe";
+
 Game.Entity = function(ch, fg, bg) {
 	this._position = null;
 	this.ch = ch;
 	this.fg = fg;
 	this.bg = bg;
 	this.blocks = true;
+	this._name = "";
+}
+
+Game.Entity.prototype.describe = function() {
+	return this._name + " (<span style='color:" + this.fg + "'>" + this.ch  +"</span>)";
 }
 
 Game.Entity.prototype.getSpeed = function() {

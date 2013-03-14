@@ -1,41 +1,42 @@
+
 Game.Enemy = function() {
 	var types = [
 		{
 			ch: "%",
 			fg: "#3f3",
-			name: "xxx",
+			name: "chlamydia",
 			power: 1
 		},
 		{
 			ch: "&",
 			fg: "#ff3",
-			name: "yyy",
+			name: "neisseria",
 			power: 2
 		},
 		{
 			ch: "§",
 			fg: "#33f",
-			name: "zzz",
+			name: "treponema",
 			power: 3
 		},
 		{
 			ch: "¤",
 			fg: "#f3f",
-			name: "qqq",
+			name: "ureaplasma",
 			power: 4			
 		},
 		{
 			ch: "※",
 			fg: "#3ff",
-			name: "www",
+			name: "haemophilus",
 			power: 5
 		}
 	];
 	var type = types.random();
+	Game.Entity.call(this, type.ch, type.fg);
 	this._name = type.name;
 	this._power = type.power;
 	this._target = null;
-	Game.Entity.call(this, type.ch, type.fg);
 }
 Game.Enemy.extend(Game.Entity);
 
@@ -54,7 +55,7 @@ Game.Enemy.prototype.bump = function(who, power) {
 	
 	if (!who.player) { return; }
 	
-	Game.message("You destroy the " + this._name + ".");
+	Game.message("You destroy the %c.".format(this));
 }
 
 Game.Enemy.prototype.act = function() {
@@ -65,10 +66,10 @@ Game.Enemy.prototype.act = function() {
 	var pos1 = this._position;
 	var pos2 = this._target.getPosition();
 	
-	var dist = this._dist(pos1[0], pos1[1], pos2[0], pos2[1]);
+	var dist = Game.Util.distance(pos1[0], pos1[1], pos2[0], pos2[1]);
 	if (dist == 1) {
-		this._target.bump(this, this._power);
-		Game.message("You are hit by a " + this._name + " and lose some energy!");
+		this._target.bump(this, 10*this._power);
+		Game.message("You are hit by a %c and lose some energy!".format(this));
 		return;
 	}
 
@@ -90,7 +91,7 @@ Game.Enemy.prototype.act = function() {
 		if (wander) {
 			avail.push([x, y]);
 		} else {
-			var dist = this._dist(x, y, pos2[0], pos2[1]);
+			var dist = Game.Util.distance(x, y, pos2[0], pos2[1]);
 			if (dist < bestDist) {
 				avail = [];
 				bestDist = dist;
@@ -103,10 +104,4 @@ Game.Enemy.prototype.act = function() {
 
 	var pos = avail.random();
 	Game.setEntity(this, pos[0], pos[1]);
-}
-
-Game.Enemy.prototype._dist = function(x1, y1, x2, y2) {
-	var dx = x1-x2;
-	var dy = y1-y2;
-	return Math.abs(dy) + Math.max(0, (Math.abs(dx)-Math.abs(dy))/2);
 }

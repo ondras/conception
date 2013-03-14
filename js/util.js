@@ -32,6 +32,12 @@ Game.Util = {
 		}
 		
 		return avail.random();
+	},
+	
+	distance: function(x1, y1, x2, y2) {
+		var dx = x1-x2;
+		var dy = y1-y2;
+		return Math.abs(dy) + Math.max(0, (Math.abs(dx)-Math.abs(dy))/2);
 	}
 	
 }

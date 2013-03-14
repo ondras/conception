@@ -84,6 +84,12 @@ Game.Player.prototype.getParts = function() {
 	return this._parts;
 }
 
+Game.Player.prototype.removeParts = function() {
+	while (this._parts.length > 1) {
+		Game.removeEntity(this._parts.pop());
+	}
+}
+
 Game.Player.prototype.handleEvent = function(e) {
 	var code = e.keyCode;
 	if (!(code in this._keys)) { return; } /* not a direction/noop */
