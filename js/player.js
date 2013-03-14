@@ -126,17 +126,22 @@ Game.Player.prototype._tryMove = function(x, y) {
 	var key = x+","+y;
 	var entity = Game.entities[key];
 	
+	
 	if (entity) {
-		var index = this._parts.indexOf(entity);
+		if (entity instanceof Game.Dead) {
+			Game.message("A body of a not-so-lucky comrade.");
+		} else {
+			var index = this._parts.indexOf(entity);
 
-		if (index == -1) { 
-			entity.bump(this, 100);
-			return true; 
-		}
+			if (index == -1) { 
+				entity.bump(this, 100);
+				return true; 
+			}
 
-		if (index < this._parts.length-1) {
-			Game.message("You cannot move into yourself!");
-			return false;
+			if (index < this._parts.length-1) {
+				Game.message("You cannot move into yourself!");
+				return false;
+			}
 		}
 	}
 	

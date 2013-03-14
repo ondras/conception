@@ -99,8 +99,13 @@ Game.Digger = {
 		if (frac > 0) {
 			this._generateRed(avail, midpoints);
 		}
+
 		if (1 || frac > 0.34) {
 			this._generateEnemies(avail, midpoints);
+		}
+
+		if (frac < 1) {
+			this._generateDead(avail, midpoints);
 		}
 	},
 	
@@ -156,6 +161,10 @@ Game.Digger = {
 	
 	_generateEnemies: function(avail, midpoints) {
 		this._generateStuff(avail, midpoints, 3, 10, Game.Enemy.create.bind(Game.Enemy));
+	},
+
+	_generateDead: function(avail, midpoints) {
+		this._generateStuff(avail, midpoints, 3, 10, Game.Dead.create.bind(Game.Dead));
 	},
 
 	_generateStuff: function(avail, midpoints, min, max, factory) {

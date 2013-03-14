@@ -5,7 +5,6 @@ Game.Entity = function(ch, fg, bg) {
 	this.ch = ch;
 	this.fg = fg;
 	this.bg = bg;
-	this.blocks = true;
 	this._name = "";
 }
 
