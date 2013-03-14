@@ -55,5 +55,5 @@ Game.Ovum.prototype._build = function() {
 }
 
 Game.Ovum.prototype._bumpPart = function(who, power) {
-	if (who.player) { Game.message("This egg's cover is impenetrable."); }
+	if (who.player) { Game.message("The egg's cover is impenetrable."); }
 }

@@ -4,21 +4,9 @@ Game.Platelet = function() {
 Game.Platelet.extend(Game.Entity);
 
 Game.Platelet.create = function(point, V) {
-	var avail = [];
-
-	var orientation = Game.Util.vectorToDirection(V);
-	var dir = ROT.DIRS[6][orientation];
-	while (point.join(",") in Game.tunnel) {
-		avail.push(point.slice());
-		point[0] += dir[0];
-		point[1] += dir[1];
-	}
-	
-	point = avail.random();
-	
+	point = Game.Util.findFreePoint(point, V);
 	var platelet = new this();
 	Game.setEntity(platelet, point[0], point[1]);
-
 	return platelet;
 }
 
@@ -37,8 +25,8 @@ Game.Platelet.prototype.bump = function(who, power) {
 	var key = next.join(",");
 	if (key in Game.tunnel && !(key in Game.entities)) {
 		Game.setEntity(this, next[0], next[1]);
-		Game.message("Looks like this platelet can be moved around...");
+		Game.message("You bump into the platelet; it moves a bit.");
 	} else {
-		Game.message("Cannot move this platelet around; something is in the way.");
+		Game.message("You bump into the platelet.");
 	}
 }

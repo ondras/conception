@@ -21,6 +21,7 @@ Game.Slider.create = function(point, V) {
 	
 	var slider = new this(orientation);
 	Game.setEntity(slider, point[0], point[1]);
+	Game.engine.addActor(slider);
 
 	return slider;
 }
@@ -36,7 +37,7 @@ Game.Slider.prototype.act = function() {
 		var entity = Game.entities[key];
 		if (entity) {
 			entity.bump(this, 20);
-			if (entity.player) { Game.message("Ouch! I was hit and lost some energy."); }
+			if (entity.player) { Game.message("You were hit and lost some of your energy."); }
 			return;
 		}
 

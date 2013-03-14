@@ -99,6 +99,9 @@ Game.Digger = {
 		if (frac > 0) {
 			this._generateRed(avail, midpoints);
 		}
+		if (1 || frac > 0.34) {
+			this._generateEnemies(avail, midpoints);
+		}
 	},
 	
 	_digQuadraticBezier: function(P0, P2, P1) {
@@ -140,39 +143,30 @@ Game.Digger = {
 	},
 	
 	_generateSliders: function(avail, midpoints) {
-		var count = Math.floor(3*ROT.RNG.getUniform());
-		for (var i=0;i<count;i++) {
-			key = avail.shift();
-			var vec = midpoints[key];
-			var parts = key.split(",");
-			parts[0] = parseInt(parts[0]);
-			parts[1] = parseInt(parts[1]);
-			var slider = Game.Slider.create(parts, vec);
-			Game.engine.addActor(slider);
-		}
+		this._generateStuff(avail, midpoints, 1, 3, Game.Slider.create.bind(Game.Slider));
 	},
 
 	_generatePlatelets: function(avail, midpoints) {
-		var count = Math.floor(3*ROT.RNG.getUniform());
-		for (var i=0;i<count;i++) {
-			key = avail.shift();
-			var vec = midpoints[key];
-			var parts = key.split(",");
-			parts[0] = parseInt(parts[0]);
-			parts[1] = parseInt(parts[1]);
-			Game.Platelet.create(parts, vec);
-		}
+		this._generateStuff(avail, midpoints, 2, 5, Game.Platelet.create.bind(Game.Platelet));
 	},
 
 	_generateRed: function(avail, midpoints) {
-		var count = Math.floor(3*ROT.RNG.getUniform());
+		this._generateStuff(avail, midpoints, 1, 3, Game.Red.create.bind(Game.Red));
+	},
+	
+	_generateEnemies: function(avail, midpoints) {
+		this._generateStuff(avail, midpoints, 3, 10, Game.Enemy.create.bind(Game.Enemy));
+	},
+
+	_generateStuff: function(avail, midpoints, min, max, factory) {
+		var count = min + Math.floor((max-min)*ROT.RNG.getUniform());
 		for (var i=0;i<count;i++) {
 			key = avail.shift();
 			var vec = midpoints[key];
 			var parts = key.split(",");
 			parts[0] = parseInt(parts[0]);
 			parts[1] = parseInt(parts[1]);
-			Game.Red.create(parts, vec);
+			factory(parts, vec);
 		}
 	}
 }

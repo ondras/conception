@@ -13,11 +13,8 @@ var Game = {
 		var node = document.createElement("p");
 		node.innerHTML = text;
 		var parent = document.querySelector("#messages > div");
-		parent.insertBefore(node, parent.firstChild);
-		
-		setTimeout(function() {
-			node.style.opacity = 0;
-		}, 8000);
+		parent.appendChild(node);		
+		this._syncMessages();
 	},
 
 	setEntity: function(entity, x, y) {
@@ -53,7 +50,7 @@ var Game = {
 			layout: "hex",
 			fontFamily: "droid sans mono",
 			border: 0.5,
-			spacing: 0.85
+			spacing: 0.88
 		}
 		this._display = new ROT.Display(options);
 
@@ -131,6 +128,8 @@ var Game = {
 		var messages = document.querySelector("#messages");
 		var height = window.innerHeight - messages.offsetTop - 20;
 		messages.style.height = height+"px";
+		
+		this._syncMessages();
 	},
 
 	_getColor: function(x, y) {
@@ -144,5 +143,13 @@ var Game = {
 			this._colors[key] = color;
 		}
 		return color;
+	},
+	
+	_syncMessages: function() {
+		var node = document.querySelector("#messages > div");
+		var height = node.offsetHeight;
+		var parentHeight = node.parentNode.offsetHeight;
+		var top = parentHeight - height;
+		node.style.top = top+"px";
 	}
 }

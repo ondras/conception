@@ -1,8 +1,7 @@
 Game.Player = function() {
 	Game.Entity.call(this, "@", "white");
 
-	this._maxEnergy = 200;
-	this._energy = this._maxEnergy+1;
+	this._energyPerPart = 50;
 	this._parts = [this];
 	this.player = true;
 
@@ -13,8 +12,9 @@ Game.Player = function() {
 		part.bump = this.bump.bind(this); /* bumping into our parts is the same as bumping to us */
 		this._parts.push(part);
 	}
+	this._maxEnergy = this._energyPerPart * this._parts.length;
+	this._energy = this._maxEnergy;
 
-	this._energyPerPart = Math.floor(this._maxEnergy/this._parts.length);
 	this._keys = {};
 
 	this._keys[ROT.VK_Y] = 0;
@@ -71,15 +71,17 @@ Game.Player.prototype.restoreEnergy = function() {
 }
 
 Game.Player.prototype.act = function() {
-	this.adjustEnergy(-1);
-	if (!this._energy) { return; }
-	
+	this._updateEnergy();
 	Game.engine.lock();
 	window.addEventListener("keydown", this); /* wait for input */
 }
 
 Game.Player.prototype.bump = function(who, power) {
 	this.adjustEnergy(-power);
+}
+
+Game.Player.prototype.getParts = function() {
+	return this._parts;
 }
 
 Game.Player.prototype.handleEvent = function(e) {
@@ -91,6 +93,7 @@ Game.Player.prototype.handleEvent = function(e) {
 	if (code == -1) { /* noop */
 		window.removeEventListener("keydown", this);
 		Game.engine.unlock();
+		this.adjustEnergy(-1);
 		return;
 	}
 
@@ -100,17 +103,17 @@ Game.Player.prototype.handleEvent = function(e) {
 	var played = this._tryMove(x, y);
 	
 	if (played) {
+		this.adjustEnergy(-1);
 		window.removeEventListener("keydown", this);
 		Game.engine.unlock();
 	}
 }
 
 Game.Player.prototype._updateEnergy = function() {
-	var node = document.querySelector("#energy");
-	node.innerHTML = this._energy;
 	var frac = this._energy/this._maxEnergy;
 	var color = ROT.Color.interpolateHSL([255, 0, 0], [60, 60, 255], frac);
-	node.style.color = ROT.Color.toRGB(color);
+	var node = document.querySelector("#energy");
+	node.innerHTML = "<span style='color:"+ROT.Color.toRGB(color)+"'>" + this._energy + "</span>/" + this._maxEnergy;
 }
 
 Game.Player.prototype._tryMove = function(x, y) {
@@ -126,13 +129,14 @@ Game.Player.prototype._tryMove = function(x, y) {
 		}
 
 		if (index < this._parts.length-1) {
+			Game.message("You cannot move into yourself!");
 			return false;
 		}
 	}
 	
 	
 	if (!(key in Game.tunnel)) {
-		Game.message("Cannot move there.");
+		Game.message("You cannot move there.");
 		return false; 
 	}
 

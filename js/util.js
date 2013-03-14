@@ -18,5 +18,20 @@ Game.Util = {
 		angle = 6*angle/(2*Math.PI);
 
 		return Math.floor(angle+2.5).mod(6);
+	},
+	
+	findFreePoint: function(point, V) {
+		var avail = [];
+
+		var orientation = this.vectorToDirection(V);
+		var dir = ROT.DIRS[6][orientation];
+		while (point.join(",") in Game.tunnel) {
+			if (!(point.join(",") in Game.entities)) { avail.push(point.slice()); }
+			point[0] += dir[0];
+			point[1] += dir[1];
+		}
+		
+		return avail.random();
 	}
+	
 }
