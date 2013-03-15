@@ -111,11 +111,14 @@ var Game = {
 		this.removeEntity(this.player);
 		var status = document.querySelector("#status")
 		if (victory) {
+			var color = "#33f";
 			status.innerHTML = "Mission accomplished!";
-			status.style.color = "#33f";
+			status.style.color = color;
+			this.message("<span style='color:"+color+"'>You successfully fertilized the egg.</span>");
 			alert("Good job, soldier! We are victorious!");
 		} else {
 			status.innerHTML = "<a href='http://en.wikipedia.org/wiki/FUBAR'>FUBAR</a>";
+			this.message("<span style='color:#f33'>You have run out of energy.</span>");
 			alert("Damn, you have run out of energy. Reload the page and try again, this is an order!");
 		}
 	},

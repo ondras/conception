@@ -66,7 +66,7 @@ Game.Player.prototype.adjustEnergy = function(diff) {
 }
 
 Game.Player.prototype.restoreEnergy = function() {
-	var max = this._parts.length * this._energyPerPart;
+	var max = this._parts.length * this._energyPerPart + 1;
 	this.adjustEnergy(max-this._energy);
 }
 
