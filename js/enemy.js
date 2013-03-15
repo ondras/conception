@@ -38,7 +38,6 @@ Game.Enemy = function(frac) {
 	for (var i=0;i<count;i++) {
 		availTypes.push(types[i]);
 	}
-	console.log("frac", frac, "availTypes.length", availTypes.length);
 	
 	var type = availTypes.random();
 	Game.Entity.call(this, type.ch, type.fg);

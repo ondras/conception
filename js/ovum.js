@@ -6,6 +6,8 @@ Game.Ovum = function(radius) {
 	this._time = 0;
 	this._hiddenPart = null;
 	this._hiddenPosition = null;
+	
+	this._hue = 1/6; /* yellow */
 }
 Game.Ovum.extend(Game.Entity);
 
@@ -15,7 +17,20 @@ Game.Ovum.prototype.setPosition = function(x, y) {
 }
 
 Game.Ovum.prototype.bump = function(who, power) {
+	setInterval(this._animate.bind(this), 50);
 	Game.over(true);
+}
+
+Game.Ovum.prototype._animate = function() {
+	this._hue += 0.03;
+	if (this._hue >= 1) { this._hue -= 1; }
+	var color = ROT.Color.hsl2rgb([this._hue, 1, 0.5]);
+	color = ROT.Color.toRGB(color);
+	
+	this.fg = color;
+	var pos = this._position.slice();
+	Game.removeEntity(this);
+	Game.setEntity(this, pos[0], pos[1]);
 }
 
 Game.Ovum.prototype.act = function() {

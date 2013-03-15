@@ -5,7 +5,7 @@ Game.Player = function() {
 	this._parts = [this];
 	this.player = true;
 
-	var parts = ["o", "∙", "∙", "∙", "∙"];
+	var parts = ["o", "∙", "∙", "∙"];
 	while (parts.length) {
 		var part = new Game.Entity(parts.shift(), "white");
 		part.player = true;

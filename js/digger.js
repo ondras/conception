@@ -3,7 +3,7 @@ Game.Digger = {
 	_options: {
 		minWidth: 3,
 		maxWidth: 8,
-		segments: 8,
+		segments: 10,
 		length: 30,
 		cpDirection: 1
 	},
@@ -81,8 +81,8 @@ Game.Digger = {
 			this._digCircle(start, 8);
 		}
 		
-		if (frac > 0 && frac < 1 && ROT.RNG.getUniform() > 0.5) {
-			var size = this._options.width + 1 + Math.floor(ROT.RNG.getUniform()*3);
+		if (frac > 0 && frac < 1 && ROT.RNG.getUniform() > 0.7) {
+			var size = this._options.width + 1 + Math.floor(ROT.RNG.getUniform()*2);
 			var key = avail.shift();
 			var parts = key.split(",");
 			var point = [parseInt(parts[0]), parseInt(parts[1])];
