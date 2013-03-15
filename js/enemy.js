@@ -1,8 +1,7 @@
-
-Game.Enemy = function() {
+Game.Enemy = function(frac) {
 	var types = [
 		{
-			ch: "%",
+			ch: "~",
 			fg: "#3f3",
 			name: "chlamydia",
 			power: 1
@@ -20,7 +19,7 @@ Game.Enemy = function() {
 			power: 3
 		},
 		{
-			ch: "¤",
+			ch: "%",
 			fg: "#f3f",
 			name: "ureaplasma",
 			power: 4			
@@ -32,7 +31,16 @@ Game.Enemy = function() {
 			power: 5
 		}
 	];
-	var type = types.random();
+	var availTypes = [];
+	var count = Math.ceil(frac*types.length);
+	if (!count) { count = 1; }
+
+	for (var i=0;i<count;i++) {
+		availTypes.push(types[i]);
+	}
+	console.log("frac", frac, "availTypes.length", availTypes.length);
+	
+	var type = availTypes.random();
 	Game.Entity.call(this, type.ch, type.fg);
 	this._name = type.name;
 	this._power = type.power;
@@ -40,10 +48,10 @@ Game.Enemy = function() {
 }
 Game.Enemy.extend(Game.Entity);
 
-Game.Enemy.create = function(point, V) {
+Game.Enemy.create = function(point, V, frac) {
 	point = Game.Util.findFreePoint(point, V);
 	if (!point) { return null; }
-	var enemy = new this();
+	var enemy = new this(frac);
 	Game.setEntity(enemy, point[0], point[1]);
 	Game.engine.addActor(enemy);
 	return enemy;

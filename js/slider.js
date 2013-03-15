@@ -1,5 +1,5 @@
 Game.Slider = function(orientation) {
-	Game.Entity.call(this, "~", "#c44");
+	Game.Entity.call(this, "¤", "#999");
 
 	this._orientation = orientation;
 	this._direction = 1;
@@ -39,6 +39,7 @@ Game.Slider.prototype.act = function() {
 		if (entity) {
 			entity.bump(this, 20);
 			if (entity.player) { Game.message("You were hit and lost some of your energy."); }
+			this._direction = -1;
 			return;
 		}
 
@@ -51,8 +52,10 @@ Game.Slider.prototype.act = function() {
 		y += dir[1];
 		if (!(x+","+y in Game.tunnel)) { this._direction = -1; }
 	} else {
-		var last = this._parts.pop();
-		Game.removeEntity(last);
+		if (this._parts.length > 1) {
+			var last = this._parts.pop();
+			Game.removeEntity(last);
+		}
 		if (this._parts.length == 1) { this._direction = 1; }
 	}
 }

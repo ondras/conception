@@ -10,6 +10,10 @@ Game.Intro.prototype.ready = function() {
 	if (!this._waiting) { this._end(); }
 }
 
+Game.Intro.prototype.advance = function() {
+	document.querySelector("#loading").innerHTML += ".";
+}
+
 Game.Intro.prototype.handleEvent = function() {
 	window.removeEventListener("keypress", this);
 	this._node.parentNode.removeChild(this._node);

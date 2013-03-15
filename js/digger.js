@@ -3,18 +3,19 @@ Game.Digger = {
 	_options: {
 		minWidth: 3,
 		maxWidth: 8,
-		segments: 3,
-		length: 40,
+		segments: 8,
+		length: 30,
 		cpDirection: 1
 	},
 	
-	dig: function(options, callback) {
+	dig: function(options) {
 		for (var p in options) { this._options[p] = options[p]; }
 		
 		var start = [0, 0];
 		var angle = 0;
-		
-		for (var i=0;i<this._options.segments;i++) {
+		var i = 0;
+
+		var dig = function() {
 			var angleDiff = ROT.RNG.getNormal(0, 1);
 			angleDiff = Math.max(angleDiff, -1);
 			angleDiff = Math.min(angleDiff, +1);
@@ -25,9 +26,18 @@ Game.Digger = {
 			];
 			this._digSegment(start, end, i/(this._options.segments-1));
 			start = end;
+			
+			Game.intro.advance();
+			i++;
+			if (i == this._options.segments) {
+				Game.intro.ready();
+			} else {
+				setTimeout(dig.bind(this), 50);
+			}
 		}
 		
-		Game.intro.ready();
+		dig.call(this);
+		
 	},
 	
 	_digCircle: function(C, radius) {
@@ -71,6 +81,14 @@ Game.Digger = {
 			this._digCircle(start, 8);
 		}
 		
+		if (frac > 0 && frac < 1 && ROT.RNG.getUniform() > 0.5) {
+			var size = this._options.width + 1 + Math.floor(ROT.RNG.getUniform()*3);
+			var key = avail.shift();
+			var parts = key.split(",");
+			var point = [parseInt(parts[0]), parseInt(parts[1])];
+			this._digCircle(point, size);
+		}
+		
 		if (frac == 1) {
 			var ovumSize = 4;
 			this._digCircle(end, 2*ovumSize + 2);
@@ -89,23 +107,23 @@ Game.Digger = {
 		}
 		
 		if (frac > 0 && frac < 1) {
-			this._generateSliders(avail, midpoints);
+			this._generateSliders(avail, midpoints, frac);
 		}
 		
 		if (frac < 1) {
-			this._generatePlatelets(avail, midpoints);
+			this._generatePlatelets(avail, midpoints, frac);
 		}
 
 		if (frac > 0) {
-			this._generateRed(avail, midpoints);
+			this._generateRed(avail, midpoints, frac);
 		}
 
-		if (1 || frac > 0.34) {
-			this._generateEnemies(avail, midpoints);
+		if (frac >= 0.2 && frac < 1) {
+			this._generateEnemies(avail, midpoints, frac);
 		}
 
 		if (frac < 1) {
-			this._generateDead(avail, midpoints);
+			this._generateDead(avail, midpoints, frac);
 		}
 	},
 	
@@ -147,27 +165,27 @@ Game.Digger = {
 		return midpoints;
 	},
 	
-	_generateSliders: function(avail, midpoints) {
-		this._generateStuff(avail, midpoints, 1, 3, Game.Slider.create.bind(Game.Slider));
+	_generateSliders: function(avail, midpoints, frac) {
+		this._generateStuff(avail, midpoints, 1, 4, Game.Slider.create.bind(Game.Slider), frac);
 	},
 
-	_generatePlatelets: function(avail, midpoints) {
-		this._generateStuff(avail, midpoints, 2, 5, Game.Platelet.create.bind(Game.Platelet));
+	_generatePlatelets: function(avail, midpoints, frac) {
+		this._generateStuff(avail, midpoints, 3, 6, Game.Platelet.create.bind(Game.Platelet), frac);
 	},
 
-	_generateRed: function(avail, midpoints) {
-		this._generateStuff(avail, midpoints, 1, 3, Game.Red.create.bind(Game.Red));
+	_generateRed: function(avail, midpoints, frac) {
+		this._generateStuff(avail, midpoints, 1, 4, Game.Red.create.bind(Game.Red), frac);
 	},
 	
-	_generateEnemies: function(avail, midpoints) {
-		this._generateStuff(avail, midpoints, 3, 10, Game.Enemy.create.bind(Game.Enemy));
+	_generateEnemies: function(avail, midpoints, frac) {
+		this._generateStuff(avail, midpoints, 3, 7, Game.Enemy.create.bind(Game.Enemy), frac);
 	},
 
-	_generateDead: function(avail, midpoints) {
-		this._generateStuff(avail, midpoints, 3, 10, Game.Dead.create.bind(Game.Dead));
+	_generateDead: function(avail, midpoints, frac) {
+		this._generateStuff(avail, midpoints, 1, 5, Game.Dead.create.bind(Game.Dead), frac);
 	},
 
-	_generateStuff: function(avail, midpoints, min, max, factory) {
+	_generateStuff: function(avail, midpoints, min, max, factory, frac) {
 		var count = min + Math.floor((max-min)*ROT.RNG.getUniform());
 		for (var i=0;i<count;i++) {
 			key = avail.shift();
@@ -175,7 +193,7 @@ Game.Digger = {
 			var parts = key.split(",");
 			parts[0] = parseInt(parts[0]);
 			parts[1] = parseInt(parts[1]);
-			factory(parts, vec);
+			factory(parts, vec, frac);
 		}
 	}
 }

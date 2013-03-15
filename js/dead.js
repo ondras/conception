@@ -30,4 +30,3 @@ Game.Dead.create = function(point, V) {
 		Game.setEntity(part, p[0], p[1]);
 	}
 }
-
