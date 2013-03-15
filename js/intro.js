@@ -2,7 +2,8 @@ Game.Intro = function() {
 	this._node = document.querySelector("#intro");
 	this._ready = false;
 	this._waiting = true;
-	setTimeout(this._timeout.bind(this), 300);
+	setTimeout(this._timeout.bind(this), 500);
+	this._node.className = "running"; /* chrome workaround (did not autostart) */
 }
 
 Game.Intro.prototype.ready = function() {

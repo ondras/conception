@@ -91,7 +91,7 @@ canvas {
 	margin: 4em 0 3em 0;
 }
 
-#intro div p {
+#intro.running div p {
 	text-align: left;
 	-webkit-animation: movement 8s linear infinite;
 	-moz-animation: movement 8s linear infinite;
@@ -118,4 +118,9 @@ canvas {
 @-moz-keyframes movement {
 	0% { -moz-transform: translate(0, 0); }
 	100% { -moz-transform: translate(100%, 0); }
+}
+
+@keyframes movement {
+	0% { transform: translate(0, 0); }
+	100% { transform: translate(100%, 0); }
 }
