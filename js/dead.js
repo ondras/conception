@@ -8,7 +8,7 @@ Game.Dead.create = function(point, V) {
 	var o2 = (o1+1).mod(6); // body orientation
 	var dir = ROT.DIRS[6][o1];
 	var bodyDir = ROT.DIRS[6][o2];
-	var chars = "...o@".split("").reverse();
+	var chars = "∙∙∙o@".split("").reverse();
 	var color = ["#333", "#444", "#555", "#666"].random();
 	
 	for (var i=0;i<chars.length;i++) {
