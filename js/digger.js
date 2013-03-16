@@ -8,6 +8,8 @@ Game.Digger = {
 		cpDirection: 1
 	},
 	
+	_midpoints: [],
+	
 	dig: function(options) {
 		for (var p in options) { this._options[p] = options[p]; }
 		
@@ -30,6 +32,7 @@ Game.Digger = {
 			Game.intro.advance();
 			i++;
 			if (i == this._options.segments) {
+				this._fillMidpoints();
 				Game.intro.ready();
 			} else {
 				setTimeout(dig.bind(this), 50);
@@ -38,6 +41,40 @@ Game.Digger = {
 		
 		dig.call(this);
 		
+	},
+	
+	_fillMidpoints: function() {
+		for (var i=0;i<this._options.segments;i++) {
+			var midpoints = this._midpoints[i];
+			this._fillMidpointPart(midpoints, i/(this._options.segments-1));
+		}
+		this._midpoints = [];
+	},
+	
+	_fillMidpointPart: function(midpoints, frac) {
+		var avail = [];
+		for (var key in midpoints) { avail.push(key); }
+		avail = avail.randomize();
+
+		if (frac > 0 && frac < 1) {
+			this._generateSliders(avail, midpoints, frac);
+		}
+		
+		if (frac < 1) {
+			this._generatePlatelets(avail, midpoints, frac);
+		}
+
+		if (frac > 0) {
+			this._generateRed(avail, midpoints, frac);
+		}
+
+		if (frac >= 0.2 && frac < 1) {
+			this._generateEnemies(avail, midpoints, frac);
+		}
+
+		if (frac < 1) {
+			this._generateDead(avail, midpoints, frac);
+		}
 	},
 	
 	_digCircle: function(C, radius) {
@@ -73,6 +110,7 @@ Game.Digger = {
 		this._options.width = mw + ROT.RNG.getUniform()*(Mw-mw);
 
 		var midpoints = this._digQuadraticBezier(start, end, cp);
+		this._midpoints.push(midpoints);
 		var avail = [];
 		for (var key in midpoints) { avail.push(key); }
 		avail = avail.randomize();
@@ -106,25 +144,6 @@ Game.Digger = {
 			}
 		}
 		
-		if (frac > 0 && frac < 1) {
-			this._generateSliders(avail, midpoints, frac);
-		}
-		
-		if (frac < 1) {
-			this._generatePlatelets(avail, midpoints, frac);
-		}
-
-		if (frac > 0) {
-			this._generateRed(avail, midpoints, frac);
-		}
-
-		if (frac >= 0.2 && frac < 1) {
-			this._generateEnemies(avail, midpoints, frac);
-		}
-
-		if (frac < 1) {
-			this._generateDead(avail, midpoints, frac);
-		}
 	},
 	
 	_digQuadraticBezier: function(P0, P2, P1) {
@@ -188,6 +207,7 @@ Game.Digger = {
 	_generateStuff: function(avail, midpoints, min, max, factory, frac) {
 		var count = min + Math.floor((max-min)*ROT.RNG.getUniform());
 		for (var i=0;i<count;i++) {
+			if (!avail.length) { return; }
 			key = avail.shift();
 			var vec = midpoints[key];
 			var parts = key.split(",");

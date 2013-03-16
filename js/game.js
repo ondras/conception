@@ -115,7 +115,9 @@ var Game = {
 			status.innerHTML = "Mission accomplished!";
 			status.style.color = color;
 			this.message("<span style='color:"+color+"'>You successfully fertilized the egg.</span>");
-			alert("Good job, soldier! We are victorious!");
+			setTimeout(function() {
+				alert("Good job, soldier! We are victorious!");
+			}, 2000);
 		} else {
 			status.innerHTML = "<a href='http://en.wikipedia.org/wiki/FUBAR'>FUBAR</a>";
 			this.message("<span style='color:#f33'>You have run out of energy.</span>");
