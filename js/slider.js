@@ -4,7 +4,7 @@ Game.Slider = function(orientation) {
 	this._orientation = orientation;
 	this._direction = 1;
 	this._parts = [this];
-	this._name = "indestructible thing";
+	this._name = "candida";
 }
 Game.Slider.extend(Game.Entity);
 
@@ -38,7 +38,7 @@ Game.Slider.prototype.act = function() {
 		var entity = Game.entities[key];
 		if (entity) {
 			entity.bump(this, 20);
-			if (entity.player) { Game.message("You were hit and lost some of your energy."); }
+			if (entity.player) { Game.message("You were hit by a %c and lost some of your energy.".format(this)); }
 			this._direction = -1;
 			return;
 		}
@@ -61,5 +61,5 @@ Game.Slider.prototype.act = function() {
 }
 
 Game.Slider.prototype.bump = function(who, power) {
-	if (who.player) { Game.message("This %c blocks the way...".format(this)); }
+	if (who.player) { Game.message("A %c blocks the way...".format(this)); }
 }
