@@ -4,7 +4,7 @@ Game.Digger = {
 		minWidth: 3,
 		maxWidth: 8,
 		segments: 10,
-		length: 30,
+		length: 32,
 		cpDirection: 1
 	},
 	
@@ -197,7 +197,7 @@ Game.Digger = {
 	},
 	
 	_generateEnemies: function(avail, midpoints, frac) {
-		this._generateStuff(avail, midpoints, 3, 7, Game.Enemy.create.bind(Game.Enemy), frac);
+		this._generateStuff(avail, midpoints, 3, 9, Game.Enemy.create.bind(Game.Enemy), frac);
 	},
 
 	_generateDead: function(avail, midpoints, frac) {
