@@ -94,6 +94,7 @@ Game.Player.prototype.handleEvent = function(e) {
 	var code = e.keyCode;
 	if (!(code in this._keys)) { return; } /* not a direction/noop */
 	
+	e.preventDefault();
 	code = this._keys[code];
 
 	if (code == -1) { /* noop */
